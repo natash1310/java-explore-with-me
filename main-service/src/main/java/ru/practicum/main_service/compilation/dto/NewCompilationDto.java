@@ -1,0 +1,26 @@
+package ru.practicum.main_service.compilation.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import ru.practicum.main_service.MainConstants;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Builder
+public class NewCompilationDto {
+    @NotBlank
+    @Size(min = MainConstants.MIN_LENGTH_TITLE, max = MainConstants.MAX_LENGTH_COMPILATION_TITLE)
+    String title;
+
+    Boolean pinned = false;
+    List<Long> events = new ArrayList<>();
+}
