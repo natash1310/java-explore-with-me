@@ -1,6 +1,8 @@
 package ru.practicum.stats_server;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -16,13 +18,21 @@ import java.time.format.DateTimeParseException;
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
+
+    @Getter
+    @AllArgsConstructor
+    private static class ErrorResponse {
+        private final String error;
+    }
+
     @ExceptionHandler({
             DateTimeParseException.class,
             MethodArgumentNotValidException.class,
             DataIntegrityViolationException.class,
             MethodArgumentTypeMismatchException.class,
             IllegalArgumentException.class,
-            MissingServletRequestParameterException.class
+            MissingServletRequestParameterException.class,
+            ClassCastException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequest(final Throwable exception) {
@@ -35,8 +45,5 @@ public class ErrorHandler {
     public ErrorResponse handleException(final RuntimeException exception) {
         log.error("Error 500: {}", exception.getMessage(), exception);
         return new ErrorResponse(exception.getMessage());
-    }
-
-    private record ErrorResponse(String error) {
     }
 }
